@@ -26,7 +26,7 @@ class App extends Component {
       newTodoBody: e.target.value
     });
   }
-
+ // 할일추가버튼
   handleButtonClick = e =>{
     if(this.state.newTodoBody) {
       const newTodo = {
@@ -43,9 +43,10 @@ class App extends Component {
       });
     }
   }
+  
   render() {
     // 클래스필드를 사용하였으니 this.state에 넣어준다.
-    const { todos,newTodoBody } = this.state;
+    const { todos, newTodoBody } = this.state;
     return (
       <div>
         <h1>할 일 목록</h1>
@@ -58,6 +59,19 @@ class App extends Component {
           {todos.map(todo => (
             <li className={todo.complete ? "complete" : ""} key={todo.id}>
               {todo.body}
+              <button onClick={e => {
+                this.setState({
+                  todos: todos.map(t => {
+                    const newTodo = {
+                      ...t
+                    };
+                    if(t.id === todo.id) {
+                      newTodo.complete = true;
+                    }
+                    return newTodo
+                  })
+                })
+              }}>완료</button>
             </li>
           ))}
         </ul>
