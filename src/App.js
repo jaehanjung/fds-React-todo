@@ -5,7 +5,7 @@ import axios from "axios";
 let count = 1;
 
 const todoAPI = axios.create({
-  baseURL: "https://excited-latency.glitch.me"
+  baseURL: "https://tangible-fear.glitch.me/"
 });
 class App extends Component {
   // 클래스필드 사용 변경이될코드는 state에 넣어준다.
@@ -27,6 +27,10 @@ class App extends Component {
   };
 
   async componentDidMount() {
+    await this.fetchTodos();
+  }
+
+  fetchTodos = async () => {
     this.setState({
       loading: true
     });
@@ -35,7 +39,7 @@ class App extends Component {
       todos: res.data,
       loading: false
     });
-  }
+  };
 
   // 이벤트 리스너로 사용될 메소드는 handl 을 사용하는게 관례
   handleInputChange = e => {
@@ -44,38 +48,40 @@ class App extends Component {
     });
   };
   // 할일추가버튼
-  handleButtonClick = e => {
+  handleButtonClick = async e => {
     if (this.state.newTodoBody) {
       const newTodo = {
         body: this.state.newTodoBody,
-        complete: false,
-        count: this.state.count++
+        complete: false
       };
       this.setState({
-        todos: [...this.state.todos, newTodo],
+        loading: true
+      });
+      await todoAPI.post("/todos", newTodo);
+      await this.fetchTodos();
+      this.setState({
         newTodoBody: ""
       });
     }
   };
 
-  handleTodoItemComplete = id => {
+  // 완료기능
+  handleTodoItemComplete = async id => {
     this.setState({
-      todos: this.state.todos.map(t => {
-        const newTodo = {
-          ...t
-        };
-        if (t.id === id) {
-          newTodo.complete = true;
-        }
-        return newTodo;
-      })
+      loading: true
     });
+    await todoAPI.patch(`/todos/${id}`, {
+      complete: true
+    });
+    await this.fetchTodos();
   };
-
-  handleTodoItemDelete = id => {
+  // 삭제기능
+  handleTodoItemDelete = async id => {
     this.setState({
-      todos: this.state.todos.filter(t => id !== t.id)
+      loading: true
     });
+    await todoAPI.delete(`/todos/${id}`);
+    await this.fetchTodos();
   };
 
   render() {
