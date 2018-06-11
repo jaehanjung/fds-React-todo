@@ -29,7 +29,7 @@ class App extends Component {
   async componentDidMount() {
     await this.fetchTodos();
   }
-
+// 로딩, 서버가져오는 코드
   fetchTodos = async () => {
     this.setState({
       loading: true
@@ -64,6 +64,16 @@ class App extends Component {
       });
     }
   };
+// 내용수정
+handleTodoItemBodyUpdate = async (id, body) => {
+  this.setState({
+    loading: true
+  });
+  await todoAPI.patch(`/todos/${id}`, {
+    body
+  })
+  await this.fetchTodos();
+}
 
   // 완료기능
   handleTodoItemComplete = async id => {
@@ -106,6 +116,7 @@ class App extends Component {
             todos={todos}
             handleTodoItemComplete={this.handleTodoItemComplete}
             handleTodoItemDelete={this.handleTodoItemDelete}
+            handleTodoItemBodyUpdate={this.handleTodoItemBodyUpdate}
           />
         )}
       </div>

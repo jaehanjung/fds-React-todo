@@ -5,7 +5,7 @@ import TodoItem from "./TodoItem";
 export default class TodoList extends Component {
   render() {
     //분해대입
-    const { todos, handleTodoItemComplete, handleTodoItemDelete } = this.props;
+    const { todos, handleTodoItemComplete, handleTodoItemDelete, handleTodoItemBodyUpdate } = this.props;
     return (
       <ul>
         {todos.map(todo => (
@@ -14,6 +14,7 @@ export default class TodoList extends Component {
             {...todo}
             onComplete={handleTodoItemComplete}
             onDelete={handleTodoItemDelete}
+            onBodyUpdate={handleTodoItemBodyUpdate}
           />
         ))}
       </ul>
