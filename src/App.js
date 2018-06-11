@@ -5,7 +5,7 @@ import axios from "axios";
 let count = 1;
 
 const todoAPI = axios.create({
-  baseURL: "https://tangible-fear.glitch.me/"
+  baseURL: process.env.REACT_APP_API_URL
 });
 class App extends Component {
   // 클래스필드 사용 변경이될코드는 state에 넣어준다.
