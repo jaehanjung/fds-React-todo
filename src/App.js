@@ -1,25 +1,41 @@
 import React, { Component } from "react";
-import TodoList from './components/TodoList';
+import TodoList from "./components/TodoList";
+import axios from "axios";
 
-let count = 0;
+let count = 1;
 
+const todoAPI = axios.create({
+  baseURL: "https://excited-latency.glitch.me"
+});
 class App extends Component {
   // 클래스필드 사용 변경이될코드는 state에 넣어준다.
   state = {
+    loading: false,
     todos: [
-      {
-        id: count++,
-        body: "react 공부",
-        complete: true
-      },
-      {
-        id: count++,
-        body: "redux 공부",
-        complete: false
-      }
+      // {
+      //   id: count++,
+      //   body: "react 공부",
+      //   complete: true
+      // },
+      // {
+      //   id: count++,
+      //   body: "redux 공부",
+      //   complete: false
+      // }
     ],
     newTodoBody: ""
   };
+
+  async componentDidMount() {
+    this.setState({
+      loading: true
+    });
+    const res = await todoAPI.get("/todos");
+    this.setState({
+      todos: res.data,
+      loading: false
+    });
+  }
 
   // 이벤트 리스너로 사용될 메소드는 handl 을 사용하는게 관례
   handleInputChange = e => {
@@ -33,7 +49,7 @@ class App extends Component {
       const newTodo = {
         body: this.state.newTodoBody,
         complete: false,
-        id: count++
+        count: this.state.count++
       };
       this.setState({
         todos: [...this.state.todos, newTodo],
@@ -64,7 +80,7 @@ class App extends Component {
 
   render() {
     // 클래스필드를 사용하였으니 this.state에 넣어준다.
-    const { todos, newTodoBody } = this.state;
+    const { todos, newTodoBody, loading } = this.state;
     return (
       <div>
         <h1>할 일 목록</h1>
@@ -77,13 +93,18 @@ class App extends Component {
           />
           <button onClick={this.handleButtonClick}>추가</button>
         </label>
-      <TodoList todos={todos} handleTodoItemComplete={this.handleTodoItemComplete}
-      handleTodoItemDelete={this.handleTodoItemDelete} />
+        {loading ? (
+          <div>loading...</div>
+        ) : (
+          <TodoList
+            todos={todos}
+            handleTodoItemComplete={this.handleTodoItemComplete}
+            handleTodoItemDelete={this.handleTodoItemDelete}
+          />
+        )}
       </div>
     );
   }
 }
-
-
 
 export default App;
