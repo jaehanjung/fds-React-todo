@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import TodoList from "./components/TodoList";
 import axios from "axios";
+import LoginPage from "./components/LoginPage"
 
 let count = 1;
 
@@ -10,6 +11,7 @@ const todoAPI = axios.create({
 class App extends Component {
   // 클래스필드 사용 변경이될코드는 state에 넣어준다.
   state = {
+    page: 'login',
     loading: false,
     todos: [
       // {
@@ -25,6 +27,12 @@ class App extends Component {
     ],
     newTodoBody: ""
   };
+
+  goTodoPage = () =>{
+    this.setState({
+      page: 'todo'
+    })
+  }
 
   async componentDidMount() {
     await this.fetchTodos();
@@ -96,9 +104,13 @@ handleTodoItemBodyUpdate = async (id, body) => {
 
   render() {
     // 클래스필드를 사용하였으니 this.state에 넣어준다.
-    const { todos, newTodoBody, loading } = this.state;
+    const { todos, newTodoBody, loading,page } = this.state;
     return (
       <div>
+      {page === "login" ? (
+        <LoginPage goTodoPage={this.goTodoPage} />
+      ) : (
+        <React.Fragment>
         <h1>할 일 목록</h1>
         <label>
           새로운 할일
@@ -109,6 +121,7 @@ handleTodoItemBodyUpdate = async (id, body) => {
           />
           <button onClick={this.handleButtonClick}>추가</button>
         </label>
+        
         {loading ? (
           <div>loading...</div>
         ) : (
@@ -119,6 +132,8 @@ handleTodoItemBodyUpdate = async (id, body) => {
             handleTodoItemBodyUpdate={this.handleTodoItemBodyUpdate}
           />
         )}
+      </React.Fragment>
+      )}
       </div>
     );
   }
