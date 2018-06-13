@@ -1,9 +1,8 @@
 import React, { Component } from "react";
-import TodoList from "./components/TodoList";
 import axios from "axios";
-import LoginPage from "./components/LoginPage"
-
-let count = 1;
+import TodoList from "./components/TodoList";
+import LoginPage from "./components/LoginPage";
+import TodoForm from "./components/TodoForm";
 
 const todoAPI = axios.create({
   baseURL: process.env.REACT_APP_API_URL
@@ -11,7 +10,7 @@ const todoAPI = axios.create({
 class App extends Component {
   // 클래스필드 사용 변경이될코드는 state에 넣어준다.
   state = {
-    page: 'login',
+    page: "login",
     loading: false,
     todos: [
       // {
@@ -24,20 +23,19 @@ class App extends Component {
       //   body: "redux 공부",
       //   complete: false
       // }
-    ],
-    newTodoBody: ""
+    ]
   };
 
-  goTodoPage = () =>{
+  goTodoPage = () => {
     this.setState({
-      page: 'todo'
-    })
-  }
+      page: "todo"
+    });
+  };
 
   async componentDidMount() {
     await this.fetchTodos();
   }
-// 로딩, 서버가져오는 코드
+  // 로딩, 서버가져오는 코드
   fetchTodos = async () => {
     this.setState({
       loading: true
@@ -49,17 +47,11 @@ class App extends Component {
     });
   };
 
-  // 이벤트 리스너로 사용될 메소드는 handl 을 사용하는게 관례
-  handleInputChange = e => {
-    this.setState({
-      newTodoBody: e.target.value
-    });
-  };
   // 할일추가버튼
-  handleButtonClick = async e => {
-    if (this.state.newTodoBody) {
+  CreateTodo = async newTodoBody => {
+    if (newTodoBody) {
       const newTodo = {
-        body: this.state.newTodoBody,
+        body: newTodoBody,
         complete: false
       };
       this.setState({
@@ -67,21 +59,18 @@ class App extends Component {
       });
       await todoAPI.post("/todos", newTodo);
       await this.fetchTodos();
-      this.setState({
-        newTodoBody: ""
-      });
     }
   };
-// 내용수정
-handleTodoItemBodyUpdate = async (id, body) => {
-  this.setState({
-    loading: true
-  });
-  await todoAPI.patch(`/todos/${id}`, {
-    body
-  })
-  await this.fetchTodos();
-}
+  // 내용수정
+  handleTodoItemBodyUpdate = async (id, body) => {
+    this.setState({
+      loading: true
+    });
+    await todoAPI.patch(`/todos/${id}`, {
+      body
+    });
+    await this.fetchTodos();
+  };
 
   // 완료기능
   handleTodoItemComplete = async id => {
@@ -104,36 +93,27 @@ handleTodoItemBodyUpdate = async (id, body) => {
 
   render() {
     // 클래스필드를 사용하였으니 this.state에 넣어준다.
-    const { todos, newTodoBody, loading,page } = this.state;
+    const { todos, loading, page } = this.state;
     return (
       <div>
-      {page === "login" ? (
-        <LoginPage goTodoPage={this.goTodoPage} />
-      ) : (
-        <React.Fragment>
-        <h1>할 일 목록</h1>
-        <label>
-          새로운 할일
-          <input
-            type="text"
-            value={newTodoBody}
-            onChange={this.handleInputChange}
-          />
-          <button onClick={this.handleButtonClick}>추가</button>
-        </label>
-        
-        {loading ? (
-          <div>loading...</div>
+        {page === "login" ? (
+          <LoginPage goTodoPage={this.goTodoPage} />
         ) : (
-          <TodoList
-            todos={todos}
-            handleTodoItemComplete={this.handleTodoItemComplete}
-            handleTodoItemDelete={this.handleTodoItemDelete}
-            handleTodoItemBodyUpdate={this.handleTodoItemBodyUpdate}
-          />
+          <React.Fragment>
+            <h1>할 일 목록</h1>
+           <TodoForm onCreate={this.CreateTodo}/>
+            {loading ? (
+              <div>loading...</div>
+            ) : (
+              <TodoList
+                todos={todos}
+                handleTodoItemComplete={this.handleTodoItemComplete}
+                handleTodoItemDelete={this.handleTodoItemDelete}
+                handleTodoItemBodyUpdate={this.handleTodoItemBodyUpdate}
+              />
+            )}
+          </React.Fragment>
         )}
-      </React.Fragment>
-      )}
       </div>
     );
   }
