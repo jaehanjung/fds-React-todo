@@ -6,16 +6,16 @@ import TodoItem from "./TodoItem";
 export default class TodoList extends Component {
   render() {
     //분해대입
-    const { todos, handleTodoItemComplete, handleTodoItemDelete, handleTodoItemBodyUpdate } = this.props;
+    const { todos, onTodoComplete, onTodoDelete, onTodoBodyUpdate } = this.props;
     return (
       <ul>
         {todos.map(todo => (
           <TodoItem
             key={todo.id}
             {...todo}
-            onComplete={handleTodoItemComplete}
-            onDelete={handleTodoItemDelete}
-            onBodyUpdate={handleTodoItemBodyUpdate}
+            onComplete={onTodoComplete}
+            onDelete={onTodoDelete}
+            onBodyUpdate={onTodoBodyUpdate}
           />
         ))}
       </ul>

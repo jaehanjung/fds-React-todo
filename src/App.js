@@ -62,7 +62,7 @@ class App extends Component {
     }
   };
   // 내용수정
-  handleTodoItemBodyUpdate = async (id, body) => {
+  UpdateTodoBody = async (id, body) => {
     this.setState({
       loading: true
     });
@@ -73,7 +73,7 @@ class App extends Component {
   };
 
   // 완료기능
-  handleTodoItemComplete = async id => {
+  CompleteTodo = async id => {
     this.setState({
       loading: true
     });
@@ -83,7 +83,7 @@ class App extends Component {
     await this.fetchTodos();
   };
   // 삭제기능
-  handleTodoItemDelete = async id => {
+  DeleteTodo = async id => {
     this.setState({
       loading: true
     });
@@ -107,9 +107,9 @@ class App extends Component {
             ) : (
               <TodoList
                 todos={todos}
-                handleTodoItemComplete={this.handleTodoItemComplete}
-                handleTodoItemDelete={this.handleTodoItemDelete}
-                handleTodoItemBodyUpdate={this.handleTodoItemBodyUpdate}
+                onTodoComplete={this.CompleteTodo}
+                onTodoDelete={this.DeleteTodo}
+                onTodoBodyUpdate={this.UpdateTodoBody}
               />
             )}
           </React.Fragment>
