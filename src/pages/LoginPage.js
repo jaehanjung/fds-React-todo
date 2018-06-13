@@ -1,11 +1,12 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
+
+import LoginForm from "../components/LoginForm";
 
 export default class LoginPage extends Component {
   render() {
-    return (
-      <div>
-        <button onClick={this.props.onLogin}>login</button>
-      </div>
+    const {onLogin} = this.props;
+    return(
+      <LoginForm onLogin={onLogin}/>
     )
   }
 }
