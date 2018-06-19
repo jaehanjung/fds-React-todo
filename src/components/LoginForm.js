@@ -1,9 +1,7 @@
 import React, { Component } from "react";
 
 import todoAPI from "../todoAPI";
-
 export default class LoginForm extends Component {
- 
   handleSubmit = e => {
     e.preventDefault();
     const username = e.target.elements.username.value;
@@ -17,7 +15,7 @@ export default class LoginForm extends Component {
       <form onSubmit={this.handleSubmit}>
         <div>
           <h1>로그인페이지</h1>
-          <input type="checkbox" defaultChecked={true}/>
+          <input type="checkbox" defaultChecked={true} />
           <label>
             아이디:
             <input defaultValue="fds" name="username" type="text" />

@@ -11,11 +11,18 @@ class PageProvider extends React.Component {
       page: "todo"
     });
   };
+
+  goToLoginPage = () => {
+    this.setState({
+      page: "login"
+    });
+  };
   render() {
     const value = {
-      page:this.state.page,
-      goTodoPage: this.goTodoPage
-    }
+      page: this.state.page,
+      goTodoPage: this.goTodoPage,
+      goToLoginPage: this.goToLoginPage
+    };
     return <Provider value={value}>{this.props.children}</Provider>;
   }
 }

@@ -13,8 +13,6 @@ class UserProvider extends React.Component {
       });
       // localStorage에 토큰 저장
       localStorage.setItem("token", res.data.token);
-      // 페이지 전환
-      this.props.onLogin();
     } catch (e) {
       if (e.response) {
         if (e.response.status === 400) {
@@ -26,9 +24,14 @@ class UserProvider extends React.Component {
       }
     }
   };
+
+  logout = () =>{
+    localStorage.removeItem('token');
+  }
   render() {
     const value = {
-      login: this.login
+      login: this.login,
+      logout: this.logout
     };
     return <Provider value={value}>{this.props.children}</Provider>;
   }

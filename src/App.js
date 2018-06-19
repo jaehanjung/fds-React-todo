@@ -1,29 +1,21 @@
 import React, { Component } from "react";
 import TodoPage from "./pages/TodoPage";
 import LoginPage from "./pages/LoginPage";
-import {PageProvider, PageConsumer} from "./contexts/PageContext";
-import {UserProvider} from "./contexts/UserContext";
+import { PageProvider, PageConsumer } from "./contexts/PageContext";
+import { UserProvider } from "./contexts/UserContext";
+// import {TodoProvider} from "./contexts/TodoContext";
 
 export default class App extends React.Component {
   render() {
     return (
       <PageProvider>
-        <PageConsumer>
-          {value => (
-            <UserProvider onLogin={value.goTodoPage}>
-            {
-              value.page === 'login' ? (
-                <LoginPage/>
-              ) : (
-              <TodoPage />
-            )
-          }
-            </UserProvider>
-          )
-            }
-            
-         
-        </PageConsumer>
+        {/* <TodoProvider> */}
+        <UserProvider>
+          <PageConsumer>
+            {value => (value.page === "login" ? <LoginPage /> : <TodoPage />)}
+          </PageConsumer>
+        </UserProvider>
+        {/* </TodoProvider> */}
       </PageProvider>
     );
   }
